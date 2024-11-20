@@ -1,0 +1,175 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/download/v1.1.7/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "",
+    "options": {
+      "set-session-context": false
+    }
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api",
+      "request-body-strict": true
+    },
+    "graphql": {
+      "enabled": true,
+      "path": "/graphql",
+      "allow-introspection": true
+    },
+    "host": {
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "StaticWebApps"
+      },
+      "mode": "development"
+    }
+  },
+  "entities": {
+    "rooms": {
+      "source": {
+        "object": "dbo.rooms",
+        "type": "table",
+        "key-fields": [
+          "room_id"
+        ]
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "rooms",
+          "plural": "rooms"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "reservations": {
+          "cardinality": "many",
+          "target.entity": "reservations",
+          "source.fields": [
+            "room_id"
+          ],
+          "target.fields": [
+            "room_id"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        }
+      }
+    },
+    "clients": {
+      "source": {
+        "object": "dbo.clients",
+        "type": "table",
+        "key-fields": [
+          "client_mail"
+        ]
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "clients",
+          "plural": "clients"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "reservations": {
+          "cardinality": "many",
+          "target.entity": "reservations",
+          "source.fields": [
+            "client_mail"
+          ],
+          "target.fields": [
+            "client_mail"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        }
+      }
+    },
+    "reservations": {
+      "source": {
+        "object": "dbo.reservations",
+        "type": "table",
+        "key-fields": [
+          "reservation_id"
+        ]
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "reservations",
+          "plural": "reservations"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "clients": {
+          "cardinality": "one",
+          "target.entity": "clients",
+          "source.fields": [
+            "client_mail"
+          ],
+          "target.fields": [
+            "client_mail"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        },
+        "rooms": {
+          "cardinality": "one",
+          "target.entity": "rooms",
+          "source.fields": [
+            "room_id"
+          ],
+          "target.fields": [
+            "room_id"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        }
+      }
+    }
+  }
+}
